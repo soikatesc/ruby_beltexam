@@ -1,0 +1,33 @@
+<nav>
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo">Hi <%= @current_user.first_name%></a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="/sessions/<%= session[:user_id] %>" data-method="delete">Logout</a></li>
+        <li><a href="/dashboard/<%= session[:user_id] %> ">Dashboard</a></li>
+      </ul>
+    </div>
+</nav>
+
+<div class="container">
+
+	<div class="row">
+		<table  class="bordered">
+			<tr>
+				<th>Pdoduct</th>
+				<th>Seller</th>
+				<th>Date Posted</th>
+				<th>Amount</th>
+				<th>Action</th>
+			</tr>
+			<% @products.each do |product| %>
+				<tr>
+					<td><%= product.name%></td>
+					<td><%= product.user.first_name%></td>
+					<td><%= product.created_at%></td>
+					<td><%= product.amount%></td>
+					<td><a href="/purchases/<%= product.id %>">Buy</a></td>
+				</tr>
+			<% end %>			
+		</table>
+	</div>	
+</div>

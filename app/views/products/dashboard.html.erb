@@ -1,0 +1,110 @@
+<nav>
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo">Hi <%= current_user.first_name%></a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="/sessions/<%= session[:user_id] %>" data-method="delete">Logout</a></li>
+        <li><a href="/shoes">Go to all products</a></li>
+      </ul>
+    </div>
+</nav>
+
+<div class="container">
+	<div class="row">
+		<div>
+			<% if flash[:errors] %>
+				<% flash[:errors].each do |error| %>
+					<p class="error"><%= error %></p>
+				<% end %>
+			<% end %>
+		</div>
+		<form class="col s12 " action="/products" method="post">
+			<input type="hidden" name="authenticity_token" value="<%=form_authenticity_token %>">
+			<div class="input-field col s6 l4">
+	      		  <i class="material-icons prefix">account_circle</i>
+		          <label for="name">Name</label>
+		          <input id="name" type="text" name="product[name]" class="validate">
+		    </div>
+
+		    <div class="input-field col s6 l4">
+	      		  <i class="material-icons prefix">account_circle</i>
+		          <label for="amount">Amount</label>
+		          <input id="amount" type="number" name="product[amount]" class="validate">
+		    </div>
+
+			<div class="row">
+	      		<div class="col l8 right-align">
+		        	<button class="btn waves-effect waves-light" type="submit" >Sell<i class="material-icons right">send</i>
+		  			</button>
+	  			</div>
+	      	</div>
+		
+		</form>	
+	</div>
+	
+	<div class="row">
+	<h3>Your products that are not yet sold:</h3>
+		<table  class="bordered">
+			<tr>
+				<th>Pdoduct</th>
+				<th>Date Posted</th>
+				<th>Amount</th>
+				<th>Action</th>
+			</tr>
+			<% @not_sold.each do |product| %>
+				<tr>
+					<td><%= product.name%></td>
+					<td><%= product.created_at%></td>
+					<td><%= product.amount%></td>
+					<td><a href="/products/<%= product.id %>" data-method="delete">Remove</a></td>
+				</tr>
+			<% end %>
+						
+		</table>
+	</div>	
+
+	<div class="row">
+	<h3>Sales:</h3>
+		<table  class="bordered">
+			<tr>
+				<th>Pdoduct</th>
+				<th>Date Bought</th>
+				<th>Buyer</th>
+				<th>Amount</th>
+			</tr>
+			<tr>
+				<% @sold.each do |product| %>
+					<tr>
+						<td><%= product.name %></td>
+						<td><%= product.created_at %></td>
+						<td><%= product.user.first_name %></td>
+						<td><%= product.amount %></td>
+					</tr>
+				<% end %>
+			</tr>
+						
+		</table>
+		<h3>Total: $<%= @sold_sum%></h3>
+	</div>	
+
+	<div class="row">
+	<h3>Purchases:</h3>
+		<table  class="bordered">
+			<tr>
+				<th>Pdoduct</th>
+				<th>Date Bought</th>
+				<th>Seller</th>
+				<th>Amount</th>
+			</tr>
+			<% @purchases.each do |purchase| %>
+				<tr>
+					<td><%= purchase.product.name%></td>
+					<td><%= purchase.product.created_at%></td>
+					<td><%= purchase.product.user.first_name%></td>
+					<td><%= purchase.product.amount%></td>
+				</tr>
+			<% end %>						
+		</table>
+		<h3>Total: $<%= @purchase_sum%></h3>
+	</div>	
+</div>
+
